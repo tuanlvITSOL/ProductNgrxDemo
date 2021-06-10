@@ -3,7 +3,6 @@ import { AuthService } from '../resources/auth.service';
 import { AlertService } from 'ngx-alerts';
 import { MockApiCartService } from '../../cart/resources/mock-api-cart.service';
 import { Router } from '@angular/router';
-import { User } from '../resources/auth';
 import * as fromAuthModels from '../resources/auth';
 import { Observable } from 'rxjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -11,7 +10,8 @@ import { NgForm } from '@angular/forms';
 import { NgxSpinnerService } from 'ngx-spinner';
 import * as fromAuthActions from 'src/app/store/actions/auth.actions';
 import { AppState } from 'src/app/store';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
+import * as fromAuthSelector from 'src/app/store/selectors/auth.selectors';
 
 @Component({
   selector: 'app-auth-links',
@@ -19,8 +19,8 @@ import { Store } from '@ngrx/store';
   styleUrls: ['./auth-links.component.scss'],
 })
 export class AuthLinksComponent implements OnInit {
-  user: User;
-  user$: Observable<User>;
+ // user: User;
+  vm$: Observable<fromAuthSelector.AuthLinksViewModal>;
   modalRef: BsModalRef;
 
   constructor(
@@ -35,7 +35,7 @@ export class AuthLinksComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.authService.user.subscribe((user) => (this.user = user));
+    this.vm$ = this.store.pipe(select(fromAuthSelector.selectAuthLinksViewModel));
   }
 
   logout() {

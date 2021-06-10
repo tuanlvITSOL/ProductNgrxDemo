@@ -12,7 +12,8 @@ import { AuthEffects } from '../../store/effects/auth.effects';
 
 @NgModule({
   declarations: [LoginComponent, AuthLinksComponent],
-  imports: [CommonModule, AuthRoutingModule, FormsModule, StoreModule.forFeature(fromAuth.authFeatureKey, fromAuth.reducer), EffectsModule.forFeature([AuthEffects])],
+  imports: [CommonModule, AuthRoutingModule, FormsModule,
+    StoreModule.forFeature(fromAuth.authFeatureKey, fromAuth.reducer), EffectsModule.forFeature([AuthEffects])],
   exports: [AuthLinksComponent],
 })
 export class AuthModule {}
