@@ -28,6 +28,8 @@ import { SpinnerEffects } from './store/effects/spinner.effects';
 import { AlertEffects } from './store/effects/alert.effects';
 import { RouteEffects } from './store/effects/route.effects';
 import { ModalEffects } from './store/effects/modal.effects';
+import { AppEffects } from './store/effect/app.effects';
+import { StoreRouterConnectingModule } from '@ngrx/router-store';
 
 @NgModule({
   declarations: [
@@ -60,10 +62,15 @@ import { ModalEffects } from './store/effects/modal.effects';
       runtimeChecks: {
         strictStateImmutability: true,
         strictActionImmutability: true,
+        strictStateSerializability: true,
+        strictActionSerializability: true,
+        strictActionWithinNgZone: true,
+        strictActionTypeUniqueness: true
       },
     }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
-    EffectsModule.forRoot([CustomerSupportEffects, SpinnerEffects, AlertEffects, RouteEffects, ModalEffects]),
+    EffectsModule.forRoot([CustomerSupportEffects, SpinnerEffects, AlertEffects, RouteEffects, ModalEffects, AppEffects]),
+    StoreRouterConnectingModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent],

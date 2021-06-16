@@ -16,6 +16,15 @@ export class RouteEffects {
     ),
     { dispatch: false}
   );
+
+  gohome$ = createEffect(
+    ()=> this.actions$.pipe(
+      ofType(fromAuthActions.logout),
+      tap(()=> this.route.navigate(['/home']))
+    ),{
+      dispatch: false
+    }
+  )
   constructor(private actions$: Actions, private route: Router) {}
 
 }

@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { User } from '../modules/auth/resources/auth';
-import { AuthService } from '../modules/auth/resources/auth.service';
 
 import { MockApiCartService } from '../modules/cart/resources/mock-api-cart.service';
+import { AppState } from '../store';
+import { browserReload } from '../store/actions/auth.actions';
 
 @Component({
   selector: 'app-core',
@@ -11,8 +13,8 @@ import { MockApiCartService } from '../modules/cart/resources/mock-api-cart.serv
 })
 export class CoreComponent implements OnInit {
   constructor(
-    private authService: AuthService,
-    private cartService: MockApiCartService
+    private cartService: MockApiCartService,
+    private store : Store<AppState>
   ) {}
 
   ngOnInit(): void {
@@ -20,8 +22,8 @@ export class CoreComponent implements OnInit {
 
     if (user) {
       this.updateShoppingCart(user.id);
-
-      this.authService.updatedUserSelection(user);
+      this.store.dispatch(browserReload({user}))
+  //    this.authService.updatedUserSelection(user);
     }
   }
 

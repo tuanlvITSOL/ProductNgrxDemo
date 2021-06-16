@@ -6,8 +6,6 @@
 	<a *ngIf="!vm.isLoggedin" [routerLink]="['/auth/login']" routerLinkActive="active"><i class="fas fa-sign-in-alt"></i> Login Page</a>
 	<a *ngIf="vm.isLoggedin" class="auth-logout-link" (click)="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
 </div>
-
-
 <ng-template #template>
 	<div class="modal-body text-center">
 

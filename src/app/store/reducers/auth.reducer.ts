@@ -24,7 +24,7 @@ export const initialState: State = {
 export const reducer = createReducer(
   initialState,
 
-  on(AuthActions.loginSuccess, (state, action) => {
+  on(AuthActions.loginSuccess,AuthActions.browserReload, (state, action) => {
     return {
       ...state,
       user: action.user,
@@ -41,6 +41,18 @@ export const reducer = createReducer(
         isadmin: null
       },
       error: action.error
+    };
+  }),
+  on(AuthActions.logout, (state, action) => {
+    return {
+      ...state,
+      user: {
+        id: null,
+        username: null,
+        email: null,
+        isadmin: null
+      },
+      error: null
     };
   })
 

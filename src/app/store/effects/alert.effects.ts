@@ -9,9 +9,9 @@ export class AlertEffects {
 
   checkingYouInformation$ = createEffect(
     () =>
-    this.actions$.pipe(
-      ofType(fromAuthActions.loginPage, fromAuthActions.loginModal),
-      tap(() => this.alertService.info('Checking your information'))),
+      this.actions$.pipe(
+        ofType(fromAuthActions.loginPage, fromAuthActions.loginModal),
+        tap(() => this.alertService.info('Checking your information'))),
     { dispatch: false }
   );
 
@@ -20,11 +20,11 @@ export class AlertEffects {
       this.actions$.pipe(
         ofType(fromAuthActions.loginSuccess),
         tap((action) =>
-        this.alertService.success (
-          'welcome Back' + action.user.username + ' !'
-        ))
+          this.alertService.success(
+            'welcome Back' + action.user.username + ' !'
+          ))
       ),
-        {dispatch: false}
+    { dispatch: false }
   );
 
   unableTologin$ = createEffect(
@@ -32,10 +32,28 @@ export class AlertEffects {
       this.actions$.pipe(
         ofType(fromAuthActions.loginFailure),
         tap(() =>
-        this.alertService.danger ('Unable to login !'
-        ))
+          this.alertService.danger('Unable to login !'
+          ))
       ),
-        {dispatch: false}
+    { dispatch: false }
   );
-  constructor(private actions$: Actions, private alertService: AlertService) {}
+  youAreLoggedOut$ = createEffect(
+    () => this.actions$.pipe(
+      ofType(fromAuthActions.logout),
+      tap(() => this.alertService.warning('you are logged out'))
+    ),
+    { dispatch: false }
+  );
+
+  comeBackSoon$ = createEffect(
+    ()=> this.actions$.pipe(
+      ofType(fromAuthActions.logout),
+      tap(()=> 
+      setTimeout(()=> {
+        this.alertService.info('Com back Soon')
+      }, 2000))
+    ), {dispatch: false}
+  )
+
+  constructor(private actions$: Actions, private alertService: AlertService) { }
 }

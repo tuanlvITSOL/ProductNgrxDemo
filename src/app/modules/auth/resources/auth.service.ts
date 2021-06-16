@@ -14,28 +14,17 @@ export class AuthService {
   //   will be done on this page. This page is designed to give a back fake data.
   /********************************************************************************** */
   baseUrl = 'http://localhost:3000/users/';
-
-  private userSource = new BehaviorSubject<fromAuthModels.User>(
-    fromAuthModels.UserModel
-  );
-  user = this.userSource.asObservable();
-
   constructor(private http: HttpClient) {}
-  login(username: string, password: string): Observable<any> {
+  login(username: string, password: string): Observable<any> { 
     return this.http.get(this.baseUrl + '?username=' + username).pipe(
       switchMap((users) => {
         const user = users[0];
         if (user) {
-          localStorage.setItem('user', JSON.stringify(user));
           return of(user);
         } else {
           return throwError('Unable to login');
         }
       })
     );
-  }
-
-  updatedUserSelection(user: fromAuthModels.User) {
-    this.userSource.next(user);
   }
 }

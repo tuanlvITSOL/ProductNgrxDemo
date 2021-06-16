@@ -14,13 +14,17 @@ export const selectIsLoggedIn = createSelector(
   selectAuthState,
   (state: fromAuth.State): boolean => state.user.id != null
 );
+export const selectIsLAdmin = createSelector(
+  selectAuthState,
+  (state: fromAuth.State): boolean => state.user.isadmin
+);
 
 export const selectAuthLinksViewModel = createSelector(
-  selectAuthState,
+  selectIsLAdmin,
   selectIsLoggedIn,
-  (state: fromAuth.State, isLoggedIn: boolean): AuthLinksViewModal => {
+  (isAdmin: boolean, isLoggedIn: boolean): AuthLinksViewModal => {
     return {
-      isAdmin: state.user.isadmin,
+      isAdmin: isAdmin,
       isLoggedin: isLoggedIn
     };
   }
