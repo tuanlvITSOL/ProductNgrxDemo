@@ -5,6 +5,9 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import * as fromProductModels from '../resources/product';
 import { PaginationService } from 'src/app/shared/services/pagination.service';
 import { environment } from 'src/environments/environment';
+import { AppState } from 'src/app/store';
+import { Store } from '@ngrx/store';
+import * as fromProductAction from '../state/product.actions';
 
 @Component({
   selector: 'app-product-list',
@@ -16,23 +19,24 @@ export class ProductListComponent implements OnInit {
     private productService: MockProductApiService,
     private alertService: AlertService,
     private spinner: NgxSpinnerService,
-    private paginationService: PaginationService
-  ) {}
+    private paginationService: PaginationService,
+    private store: Store<AppState>
+  ) { }
 
   products: fromProductModels.Product[] = [];
   pagination: fromProductModels.Pagination;
   currentUrl: string;
 
   ngOnInit(): void {
-    this.loadProducts(
-      this.paginationService.createUrl(
+    this.store.dispatch(fromProductAction.loadAdminProducts({
+      url: this.paginationService.createUrl(
         '0',
         '999',
         '1',
-        '25',
+        '9',
         environment.baseUrl + 'products?'
       )
-    );
+    }))
   }
 
   loadProducts(url: string) {
