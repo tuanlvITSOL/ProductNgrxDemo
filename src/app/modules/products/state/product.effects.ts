@@ -15,7 +15,7 @@ export class ProductEffects {
       ofType(ProductActions.loadProducts, ProductActions.loadAdminProducts),
       mergeMap((action) =>
         this.productService.getProducts(action.url).pipe(
-          map(data => ProductActions.loadProductsSuccess({ products: data.result })),
+          map(data => ProductActions.loadProductsSuccess({ paginatedResult: data })),
           catchError(error => of(ProductActions.loadProductsFailure({ error }))))
       ),
     );

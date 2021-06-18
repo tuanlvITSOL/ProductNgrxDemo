@@ -6,8 +6,11 @@ import * as fromProductModels from '../resources/product';
 import { PaginationService } from 'src/app/shared/services/pagination.service';
 import { environment } from 'src/environments/environment';
 import { AppState } from 'src/app/store';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import * as fromProductAction from '../state/product.actions';
+import * as fromProductSelector from '../state/product.selectors';
+import { Observable } from 'rxjs';
+
 
 @Component({
   selector: 'app-product-list',
@@ -26,38 +29,26 @@ export class ProductListComponent implements OnInit {
   products: fromProductModels.Product[] = [];
   pagination: fromProductModels.Pagination;
   currentUrl: string;
+  vm$: Observable<fromProductSelector.ProductsViewModel>
 
   ngOnInit(): void {
-    this.store.dispatch(fromProductAction.loadAdminProducts({
-      url: this.paginationService.createUrl(
+    this.vm$ = this.store.pipe(select(fromProductSelector.selectProductsViewModel));
+    this.loadProducts(
+      this.paginationService.createUrl(
         '0',
         '999',
         '1',
-        '9',
+        '25',
         environment.baseUrl + 'products?'
-      )
-    }))
+      ));
+
+
   }
 
   loadProducts(url: string) {
-    this.currentUrl = url;
-    this.spinner.show();
-    const productsObserver = {
-      next: (response) => {
-        this.products = response.result;
-        this.pagination = response.pagination;
-        setTimeout(() => {
-          this.spinner.hide();
-        }, 1000);
-      },
-      error: (err) => {
-        console.error(err);
-        this.alertService.danger('Unable to load products');
-        this.spinner.hide();
-      },
-    };
-
-    this.productService.getProducts(url).subscribe(productsObserver);
+    this.store.dispatch(fromProductAction.loadAdminProducts({
+      url: url
+    }))
   }
 
   deleteProduct(id: number) {

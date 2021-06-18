@@ -2,18 +2,20 @@ import { Action, createReducer, on } from '@ngrx/store';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 
 import * as ProductActions from './product.actions';
-import { Product } from '../resources/product';
+import { Pagination, Product } from '../resources/product';
 
 export const productsFeatureKey = 'products';
 
 export interface State extends EntityState<Product> {
   error: any;
+  pagination: Pagination;
 }
 
 export const adapter: EntityAdapter<Product> = createEntityAdapter<Product>();
 
 export const initialState: State = adapter.getInitialState({
- error: null
+ error: null,
+ pagination: null
 });
 
 
@@ -21,7 +23,10 @@ export const reducer = createReducer(
   initialState,
 
   on(ProductActions.loadProductsSuccess,
-    (state, action) => adapter.setAll(action.products, state)
+    (state, action) => adapter.setAll(action.paginatedResult.result,  {
+      ...state,
+      pagination: action.paginatedResult.pagination
+    })
   ),
   on(ProductActions.addProduct,
     (state, action) => adapter.addOne(action.product, state)
